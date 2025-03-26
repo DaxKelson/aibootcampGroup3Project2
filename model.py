@@ -2,16 +2,16 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import balanced_accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, classification_report, confusion_matrix, roc_auc_score, roc_curve
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 import xgboost as xgb
 from sklearn.ensemble import AdaBoostClassifier
-import inspect
 
 def plot_confusion_matrix(y_test, y_pred):
     ''' Plots a confusion matrix given test and predicted values '''
@@ -36,8 +36,6 @@ def evaluate_model(model, X_test, y_test):
     plot_roc_curve(y_test, y_pred)
     print("AUC Score:", roc_auc_score(y_test, y_pred))
     plot_confusion_matrix(y_test, y_pred)
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
 
 def model_don_model(X_train, y_train, SEED=42):
     """
@@ -47,31 +45,17 @@ def model_don_model(X_train, y_train, SEED=42):
     model.fit(X_train, y_train)
     return model
     
-def model_XGBoost_V1(X_train, y_train, SEED=42):
+
+def XGBoost_V1():
     '''
     XGBoost classifier
     '''
     # Create a model
     return xgb.XGBClassifier()
 
-def model_ADABoost_V1(X_train, y_train, SEED=42):
+def ADABoost_V1():
     '''
     ADABoost classifier
     '''
     # Create a model
     return AdaBoostClassifier(n_estimators=50, learning_rate=1)
-
-def evaluate_models(X_test, y_test):
-    results = []
-    for name, func in globals().items():
-        if callable(func) and name.startswith("model_"):
-            docstring = inspect.getdoc(func) or "No Comment"
-            model = func(X_test, y_test)
-            y_pred = model.predict(X_test)
-            accuracy = balanced_accuracy_score(y_test, y_pred)
-            results.append({"Model": name, "Description": docstring, "Accuracy": accuracy})
-    
-    # Save results to CSV
-    df = pd.DataFrame(results)
-    df.to_csv("model_evaluation.csv", index=False)
-    print("Evaluation saved to model_evaluation.csv")
