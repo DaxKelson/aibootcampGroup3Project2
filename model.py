@@ -24,6 +24,7 @@ def plot_confusion_matrix(y_test, y_pred):
     plt.show()
 
 def plot_roc_curve(y_test, y_pred):
+    ''' Plots a ROC curve given test and predicted values '''
     fpr, tpr, thresholds = roc_curve(y_test, y_pred)
     plt.plot(fpr, tpr)
     plt.xlabel('False Positive Rate')
@@ -31,6 +32,7 @@ def plot_roc_curve(y_test, y_pred):
     plt.show()
 
 def evaluate_model(model, X_test, y_test):
+    ''' Evaluates a model given test data with accuracy, balanced accuracy, classification report, ROC curve, AUC score, and confusion matrix '''
     print("Model Score: ", model.score(X_test, y_test))
     y_pred = model.predict(X_test)
     print("Accuracy Score:", accuracy_score(y_test, y_pred))
@@ -108,10 +110,8 @@ def XGBoost_V1():
 def XGBoost_V2():
     '''
     XGBoost classifier with hyperparameter tuning using GridSearchCV
-    https://www.kaggle.com/code/tilii7/hyperparameter-grid-search-with-xgboost
     '''
     # Create the grid search estimator along with a parameter object containing the values to adjust.
-    from sklearn.model_selection import GridSearchCV
     grid_tuned_model = xgb.XGBClassifier(random_state=42)
 
     param_grid = {
@@ -128,8 +128,7 @@ def XGBoost_V3():
     '''
     XGBoost classifier with hyperparameter tuning using RandomizedSearchCV
     '''
-    # Create the parameter object for the randomized search estimator.
-    from sklearn.model_selection import RandomizedSearchCV
+    # Create the parameter object for the randomized search estimator.    
     random_tuned_model = xgb.XGBClassifier(random_state=42)
 
     param_grid = {
@@ -139,7 +138,7 @@ def XGBoost_V3():
         'colsample_bytree': [0.6, 0.8, 1.0],
         'max_depth': [3, 4, 5]
     }
-    grid_clf = GridSearchCV(random_tuned_model, param_grid, verbose=3)
+    grid_clf = RandomizedSearchCV(random_tuned_model, param_grid, verbose=3)
     return grid_clf
 
 def ADABoost_V1():
@@ -152,10 +151,8 @@ def ADABoost_V1():
 def ADABoost_V2():
     '''
     ADABoost classifier with hyperparameter tuning using GridSearchCV
-    https://www.kaggle.com/code/bachnguyentfk/adaboost-hyperparameters-grid-search
     '''
     # Create the grid search estimator along with a parameter object containing the values to adjust.
-    from sklearn.model_selection import GridSearchCV
     grid_tuned_model = AdaBoostClassifier(random_state=42)
 
     param_grid = {
@@ -170,7 +167,6 @@ def ADABoost_V3():
     ADABoost classifier with hyperparameter tuning using RandomizedSearchCV
     '''
     # Create the parameter object for the randomized search estimator.
-    from sklearn.model_selection import RandomizedSearchCV
     random_tuned_model = AdaBoostClassifier(random_state=42)
 
     param_grid = {
