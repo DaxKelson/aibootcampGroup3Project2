@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, classification_report, confusion_matrix, roc_auc_score, roc_curve
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 import xgboost as xgb
@@ -38,22 +39,64 @@ def evaluate_model(model, X_test, y_test):
     print("AUC Score:", roc_auc_score(y_test, y_pred))
     plot_confusion_matrix(y_test, y_pred)
 
-def model_don_model_V1(X_train, y_train, SEED=42):
+def model_random_forest_model_V1(X_train, y_train, SEED=42):
     """
-    Don's Model
+    Simple Random ForestModel with 100 n_estimators
     """
     model = RandomForestClassifier(n_estimators=100, random_state=SEED)
     model.fit(X_train, y_train)
     return model
 
-def model_don_model_V2(X_train, y_train, SEED=42):
+def model_random_forest_model_V2(X_train, y_train, SEED=42):
     """
-    Don's Model 2
+    Use RandomSearchCV to optimize the random forest model    
     """
-    model = RandomForestClassifier(n_estimators=50, random_state=SEED)
-    model.fit(X_train, y_train)
-    return model
+    param_grid = {
+        'n_estimators': [100, 200],
+        'max_depth': [None, 10, 20],
+        'min_samples_split': [2, 5],
+        'min_samples_leaf': [1, 2],
+        'bootstrap': [True, False]
+    }
     
+    rf = RandomForestClassifier(random_state=SEED)
+    random_search = RandomizedSearchCV(rf, param_grid, n_iter=10, cv=3, n_jobs=-1, verbose=1, scoring='accuracy')
+    random_search.fit(X_train, y_train)
+    
+    return random_search.best_estimator_
+    
+def model_logistic_regression_v1(X_train, y_train):
+    """
+        Logistic Regression
+    """
+    param_grid = {
+        'C': [0.01, 0.1, 1, 10, 100],   # Regularization strength
+        'solver': ['liblinear', 'lbfgs'] # Different solvers
+    }
+
+    model = LogisticRegression(max_iter=100)
+
+    grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+    grid_search.fit(X_train, y_train)
+
+    return grid_search.best_estimator_
+
+def model_logistic_regression_v2(X_train, y_train):
+    """
+        Logistic Regression
+    """
+    param_grid = {
+        'C': [0.01, 0.1, 1, 10, 100, 200],   # Regularization strength
+        'solver': ['liblinear', 'lbfgs'] # Different solvers
+    }
+
+    model = LogisticRegression(max_iter=100)
+
+    grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+    grid_search.fit(X_train, y_train)
+
+    return grid_search.best_estimator_
+
 def XGBoost_V1():
     '''
     XGBoost classifier
@@ -76,7 +119,8 @@ def evaluate_models(X_test, y_test):
              model = func(X_test, y_test)
              y_pred = model.predict(X_test)
              accuracy = balanced_accuracy_score(y_test, y_pred)
-             results.append({"Model": name, "Description": docstring, "Accuracy": accuracy})
+             f1_score = classification_report(y_test, y_pred)
+             results.append({"Model": name, "Description": docstring, "Accuracy": accuracy, "f1 scores": f1_score})
      
      # Save results to CSV
      df = pd.DataFrame(results)
