@@ -65,7 +65,7 @@ def model_random_forest_model_V2(X_train, y_train, SEED=42):
     
     return random_search.best_estimator_
     
-def model_logistic_regression_v1(X_train, y_train):
+def model_logistic_regression_v1(X_train, y_train, SEED=42):
     """
         Logistic Regression
     """
@@ -74,23 +74,23 @@ def model_logistic_regression_v1(X_train, y_train):
         'solver': ['liblinear', 'lbfgs'] # Different solvers
     }
 
-    model = LogisticRegression(max_iter=100)
+    model = LogisticRegression(max_iter=300)
 
     grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
     grid_search.fit(X_train, y_train)
 
     return grid_search.best_estimator_
 
-def model_logistic_regression_v2(X_train, y_train):
+def model_logistic_regression_v2(X_train, y_train, SEED=42):
     """
         Logistic Regression
     """
     param_grid = {
-        'C': [0.01, 0.1, 1, 10, 100, 200],   # Regularization strength
+        'C': [0.01, 0.1, 1, 10, 100, 200, 300, 400, 500],   # Regularization strength
         'solver': ['liblinear', 'lbfgs'] # Different solvers
     }
 
-    model = LogisticRegression(max_iter=100)
+    model = LogisticRegression(max_iter=500)
 
     grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
     grid_search.fit(X_train, y_train)
