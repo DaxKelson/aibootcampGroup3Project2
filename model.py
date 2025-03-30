@@ -31,7 +31,7 @@ def plot_roc_curve(y_test, y_pred):
     plt.ylabel('True Positive Rate')
     plt.show()
 
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, X_train, X_test, y_train, y_test):
     ''' Evaluates a model given test data with accuracy, balanced accuracy, classification report, ROC curve, AUC score, and confusion matrix '''
     print("Model Score: ", model.score(X_test, y_test))
     y_pred = model.predict(X_test)
@@ -41,6 +41,10 @@ def evaluate_model(model, X_test, y_test):
     plot_roc_curve(y_test, y_pred)
     print("AUC Score:", roc_auc_score(y_test, y_pred))
     plot_confusion_matrix(y_test, y_pred)
+
+    print("Large gap in score means overfitting: ")
+    print(model.score(X_train, y_train))
+    print(model.score(X_test, y_test))
 
 def model_random_forest_model_V1(X_train, y_train, SEED=42):
     """
@@ -81,6 +85,8 @@ def model_logistic_regression_v1(X_train, y_train, SEED=42):
 
     grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
     grid_search.fit(X_train, y_train)
+    print("Best Parameters: ")
+    print(grid_search.best_params_)
 
     return grid_search.best_estimator_
 
@@ -97,6 +103,9 @@ def model_logistic_regression_v2(X_train, y_train, SEED=42):
 
     grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
     grid_search.fit(X_train, y_train)
+
+    print("Best Parameters: ")
+    print(grid_search.best_params_)
 
     return grid_search.best_estimator_
 
