@@ -132,10 +132,7 @@ def model_xgboost_V2(X_train, y_train, SEED=42):
     grid_clf.fit(X_train, y_train)
     print("Best parameters found: ", grid_clf.best_params_)
     print("Best score found: ", grid_clf.best_score_)
-    # Fit the model with the best parameters
-    grid_clf = xgb.XGBClassifier(**grid_clf.best_params_, random_state=42)
-    grid_clf.fit(X_train, y_train)
-    return grid_clf
+    return grid_clf.best_params_
 
 def model_xgboost_V3(X_train, y_train, SEED=42):
     '''
@@ -155,10 +152,7 @@ def model_xgboost_V3(X_train, y_train, SEED=42):
     rand_clf.fit(X_train, y_train)
     print("Best parameters found: ", rand_clf.best_params_)
     print("Best score found: ", rand_clf.best_score_)
-    # Fit the model with the best parameters
-    rand_clf = xgb.XGBClassifier(**rand_clf.best_params_, random_state=42)
-    rand_clf.fit(X_train, y_train)
-    return rand_clf
+    return rand_clf.best_params_
 
 def model_adaboost_V1(X_train, y_train, SEED=42):
     '''
@@ -182,10 +176,7 @@ def model_adaboost_V2(X_train, y_train, SEED=42):
     grid_clf.fit(X_train, y_train)
     print("Best parameters found: ", grid_clf.best_params_)
     print("Best score found: ", grid_clf.best_score_)
-    # Fit the model with the best parameters
-    grid_clf = xgb.XGBClassifier(**grid_clf.best_params_, random_state=42)
-    grid_clf.fit(X_train, y_train)
-    return grid_clf
+    return grid_clf.best_params_
 
 def model_adaboost_V3(X_train, y_train, SEED=42):
     '''
@@ -202,10 +193,7 @@ def model_adaboost_V3(X_train, y_train, SEED=42):
     rand_clf.fit(X_train, y_train)
     print("Best parameters found: ", rand_clf.best_params_)
     print("Best score found: ", rand_clf.best_score_)
-    # Fit the model with the best parameters
-    rand_clf = xgb.XGBClassifier(**rand_clf.best_params_, random_state=42)
-    rand_clf.fit(X_train, y_train)
-    return rand_clf
+    return rand_clf.best_params_
 
 def evaluate_models(X_test, y_test):
      results = []
