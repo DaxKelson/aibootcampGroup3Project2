@@ -31,9 +31,10 @@ def plot_roc_curve(y_test, y_pred):
     plt.ylabel('True Positive Rate')
     plt.show()
 
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, X_train, y_train, X_test, y_test):
     ''' Evaluates a model given test data with accuracy, balanced accuracy, classification report, ROC curve, AUC score, and confusion matrix '''
-    print("Model Score: ", model.score(X_test, y_test))
+    print("Train Model Score: ", model.score(X_train, y_train))
+    print("Test Model Score: ", model.score(X_test, y_test))
     y_pred = model.predict(X_test)
     print("Accuracy Score:", accuracy_score(y_test, y_pred))
     print("Balanced Accuracy Score:", balanced_accuracy_score(y_test, y_pred))
@@ -100,14 +101,13 @@ def model_logistic_regression_v2(X_train, y_train, SEED=42):
 
     return grid_search.best_estimator_
 
-def XGBoost_V1():
+def model_xgboost_V1(X_train, y_train, SEED=42):
     '''
-    XGBoost classifier
+    XGBoost classifier with default parameters
     '''
-    # Create a model
-    return xgb.XGBClassifier(random_state=42)
+    return xgb.XGBClassifier(random_state=42).fit(X_train, y_train)
 
-def XGBoost_V2():
+def model_xgboost_V2(X_train, y_train, SEED=42):
     '''
     XGBoost classifier with hyperparameter tuning using GridSearchCV
     '''
@@ -122,9 +122,15 @@ def XGBoost_V2():
         'max_depth': [3, 4, 5]
     }
     grid_clf = GridSearchCV(grid_tuned_model, param_grid, verbose=3)
+    grid_clf.fit(X_train, y_train)
+    print("Best parameters found: ", grid_clf.best_params_)
+    print("Best score found: ", grid_clf.best_score_)
+    # Fit the model with the best parameters
+    grid_clf = xgb.XGBClassifier(**grid_clf.best_params_, random_state=42)
+    grid_clf.fit(X_train, y_train)
     return grid_clf
 
-def XGBoost_V3():
+def model_xgboost_V3(X_train, y_train, SEED=42):
     '''
     XGBoost classifier with hyperparameter tuning using RandomizedSearchCV
     '''
@@ -138,17 +144,23 @@ def XGBoost_V3():
         'colsample_bytree': [0.6, 0.8, 1.0],
         'max_depth': [3, 4, 5]
     }
-    grid_clf = RandomizedSearchCV(random_tuned_model, param_grid, verbose=3)
-    return grid_clf
+    rand_clf = RandomizedSearchCV(random_tuned_model, param_grid, verbose=3)
+    rand_clf.fit(X_train, y_train)
+    print("Best parameters found: ", rand_clf.best_params_)
+    print("Best score found: ", rand_clf.best_score_)
+    # Fit the model with the best parameters
+    rand_clf = xgb.XGBClassifier(**rand_clf.best_params_, random_state=42)
+    rand_clf.fit(X_train, y_train)
+    return rand_clf
 
-def ADABoost_V1():
+def model_adaboost_V1(X_train, y_train, SEED=42):
     '''
     ADABoost classifier
     '''
     # Create a model
-    return AdaBoostClassifier(random_state=42)
+    return AdaBoostClassifier(random_state=42).fit(X_train, y_train)
 
-def ADABoost_V2():
+def model_adaboost_V2(X_train, y_train, SEED=42):
     '''
     ADABoost classifier with hyperparameter tuning using GridSearchCV
     '''
@@ -160,9 +172,15 @@ def ADABoost_V2():
         'learning_rate': [0.1, 0.5, 1]
     }
     grid_clf = GridSearchCV(grid_tuned_model, param_grid, verbose=3)
+    grid_clf.fit(X_train, y_train)
+    print("Best parameters found: ", grid_clf.best_params_)
+    print("Best score found: ", grid_clf.best_score_)
+    # Fit the model with the best parameters
+    grid_clf = xgb.XGBClassifier(**grid_clf.best_params_, random_state=42)
+    grid_clf.fit(X_train, y_train)
     return grid_clf
 
-def ADABoost_V3():
+def model_adaboost_V3(X_train, y_train, SEED=42):
     '''
     ADABoost classifier with hyperparameter tuning using RandomizedSearchCV
     '''
@@ -173,9 +191,14 @@ def ADABoost_V3():
         'n_estimators': [50, 100, 200],
         'learning_rate': [0.1, 0.5, 1]
     }
-    grid_clf = GridSearchCV(random_tuned_model, param_grid, verbose=3)
-    return grid_clf
-    return AdaBoostClassifier(n_estimators=50, learning_rate=1)
+    rand_clf = RandomizedSearchCV(random_tuned_model, param_grid, verbose=3)
+    rand_clf.fit(X_train, y_train)
+    print("Best parameters found: ", rand_clf.best_params_)
+    print("Best score found: ", rand_clf.best_score_)
+    # Fit the model with the best parameters
+    rand_clf = xgb.XGBClassifier(**rand_clf.best_params_, random_state=42)
+    rand_clf.fit(X_train, y_train)
+    return rand_clf
 
 def evaluate_models(X_test, y_test):
      results = []
