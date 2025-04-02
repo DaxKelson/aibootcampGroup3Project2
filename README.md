@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This project is an AI-driven Ecommerce Purchase Predictor that determines whether a customer will make a purchase based on various behavioral and device-related features. The model leverages machine learning techniques to analyze user interaction data and predict purchasing likelihood.
+This project is an AI-driven E-commerce Purchase Predictor that determines whether a customer will make a purchase based on various behavioral and device-related features. The model leverages machine learning techniques to analyze user interaction data and predict purchasing likelihood.
 
 The project includes a user-friendly GUI built with Tkinter, allowing users to input feature values dynamically and receive real-time predictions.
 
@@ -29,6 +29,8 @@ E-commerce businesses often struggle with cart abandonment and customer retentio
 - We used `StandardScaler` to normalize continuous numerical features.
 - Categorical features were encoded using `OneHotEncoder` and `OrdinalEncoder`.
 - The data was split into training and testing sets to evaluate model performance effectively.
+![Clean up and preprocessing](Slide Deck/Project2_Slide_5.jpg)
+
 
 ## Model Selection and Training
 
@@ -38,6 +40,7 @@ We experimented with multiple machine learning models, including:
 2. **Decision Trees**
 3. **Random Forest Classifier** (best performing)
 4. **Gradient Boosting Machines (GBM)**
+![Model Performance Results](Slide Deck/Project2_Slide_9.jpg)
 
 ### Best Performing Model: Random Forest Classifier
 
@@ -47,6 +50,7 @@ We experimented with multiple machine learning models, including:
   - Precision: 82%
   - Recall: 88%
 - **Model was saved using `joblib` for deployment.**
+![Performance Metrics](Slide Deck/Project2_Slide_10.jpg)
 
 ## How to Install and Run
 
