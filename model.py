@@ -132,7 +132,7 @@ def model_xgboost_V2(X_train, y_train, SEED=42):
     grid_clf.fit(X_train, y_train)
     print("Best parameters found: ", grid_clf.best_params_)
     print("Best score found: ", grid_clf.best_score_)
-    return grid_clf.best_params_
+    return grid_clf.best_estimator_
 
 def model_xgboost_V3(X_train, y_train, SEED=42):
     '''
@@ -152,7 +152,7 @@ def model_xgboost_V3(X_train, y_train, SEED=42):
     rand_clf.fit(X_train, y_train)
     print("Best parameters found: ", rand_clf.best_params_)
     print("Best score found: ", rand_clf.best_score_)
-    return rand_clf.best_params_
+    return rand_clf.best_estimator_
 
 def model_adaboost_V1(X_train, y_train, SEED=42):
     '''
@@ -176,7 +176,7 @@ def model_adaboost_V2(X_train, y_train, SEED=42):
     grid_clf.fit(X_train, y_train)
     print("Best parameters found: ", grid_clf.best_params_)
     print("Best score found: ", grid_clf.best_score_)
-    return grid_clf.best_params_
+    return grid_clf.best_estimator_
 
 def model_adaboost_V3(X_train, y_train, SEED=42):
     '''
@@ -193,7 +193,7 @@ def model_adaboost_V3(X_train, y_train, SEED=42):
     rand_clf.fit(X_train, y_train)
     print("Best parameters found: ", rand_clf.best_params_)
     print("Best score found: ", rand_clf.best_score_)
-    return rand_clf.best_params_
+    return rand_clf.best_estimator_
 
 def evaluate_models(X_test, y_test):
      results = []
