@@ -14,6 +14,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 import xgboost as xgb
 from sklearn.ensemble import AdaBoostClassifier
+import os
 
 def plot_confusion_matrix(y_test, y_pred):
     ''' Plots a confusion matrix given test and predicted values '''
@@ -31,15 +32,40 @@ def plot_roc_curve(y_test, y_pred):
     plt.ylabel('True Positive Rate')
     plt.show()
 
-def evaluate_model(model, X_train, X_test, y_train, y_test):
+def evaluate_model(model, name_and_iteration, description, X_train, X_test, y_train, y_test, print_plots: bool = False):
     ''' Evaluates a model given test data with accuracy, balanced accuracy, classification report, ROC curve, AUC score, and confusion matrix '''
+    file_exists = os.path.isfile('gen_model_iterations_report.csv')
     y_pred = model.predict(X_test)
+    report = classification_report(y_test, y_pred, output_dict=True)
+    # Extract the metrics
+    class_report = report['macro avg']
+    #append to model_iterations file
+    new_data = {
+        'Name and Iterations' : name_and_iteration,
+        'Description' : description,
+        'Accuracy Score': accuracy_score(y_test, y_pred),
+        'Balanced Accuracy Score': balanced_accuracy_score(y_test, y_pred),
+        'AUC Score': roc_auc_score(y_test, y_pred),
+        'Train Score': model.score(X_train, y_train),
+        'Test Score': model.score(X_test, y_test),
+        'Precision (Macro)': class_report['precision'],
+        'Recall (Macro)': class_report['recall'],
+        'F1-Score (Macro)': class_report['f1-score'],
+        'Support (Macro)': class_report['support']
+    }
+    df = pd.DataFrame([new_data])
+    df.to_csv('gen_model_iterations_report.csv', mode='a', header=not file_exists, index=False)  # 'a' for append mode, no header
+
+    #print out scoring
+    print("Model Score: ", model.score(X_test, y_test))
     print("Accuracy Score:", accuracy_score(y_test, y_pred))
     print("Balanced Accuracy Score:", balanced_accuracy_score(y_test, y_pred))
     print(classification_report(y_test, y_pred))
-    plot_roc_curve(y_test, y_pred)
     print("AUC Score:", roc_auc_score(y_test, y_pred))
-    plot_confusion_matrix(y_test, y_pred)
+
+    if(print_plots):
+        plot_roc_curve(y_test, y_pred)
+        plot_confusion_matrix(y_test, y_pred)
 
     print("Large gap in score means overfitting: ")
     print(model.score(X_train, y_train))
@@ -68,7 +94,10 @@ def model_random_forest_model_V2(X_train, y_train, SEED=42):
     rf = RandomForestClassifier(random_state=SEED)
     random_search = RandomizedSearchCV(rf, param_grid, n_iter=10, cv=3, n_jobs=-1, verbose=1, scoring='accuracy')
     random_search.fit(X_train, y_train)
-    
+    print("Best Parameters: ")
+    print(random_search.best_params_)
+
+
     return random_search.best_estimator_
     
 def model_logistic_regression_v1(X_train, y_train, SEED=42):
@@ -94,7 +123,7 @@ def model_logistic_regression_v2(X_train, y_train, SEED=42):
         Logistic Regression
     """
     param_grid = {
-        'C': [0.01, 0.1, 1, 10, 100, 200, 300, 400, 500],   # Regularization strength
+        'C': [0.01, 0.1, 1, 10, 100, 200],   # Regularization strength
         'solver': ['liblinear', 'lbfgs'] # Different solvers
     }
 
@@ -189,23 +218,19 @@ def model_adaboost_V3(X_train, y_train, SEED=42):
         'n_estimators': [50, 100, 200],
         'learning_rate': [0.1, 0.5, 1]
     }
-    rand_clf = RandomizedSearchCV(random_tuned_model, param_grid, verbose=3)
-    rand_clf.fit(X_train, y_train)
-    print("Best parameters found: ", rand_clf.best_params_)
-    print("Best score found: ", rand_clf.best_score_)
-    return rand_clf.best_estimator_
+    grid_clf = GridSearchCV(random_tuned_model, param_grid, verbose=3)
+    return grid_clf
 
 def evaluate_models(X_test, y_test):
      results = []
      for name, func in globals().items():
          if callable(func) and name.startswith("model_"):
-             docstring = inspect.getdoc(func) or "No Comment"
-             model = func(X_test, y_test)
-             y_pred = model.predict(X_test)
-             accuracy = balanced_accuracy_score(y_test, y_pred)
-             f1_score = classification_report(y_test, y_pred)
-             results.append({"Model": name, "Description": docstring, "Accuracy": accuracy, "f1 scores": f1_score})
-     
+            docstring = inspect.getdoc(func) or "No Comment"
+            model = func(X_test, y_test)
+            y_pred = model.predict(X_test)
+            accuracy = balanced_accuracy_score(y_test, y_pred)
+            f1_score = classification_report(y_test, y_pred)
+            results.append({"Model": name, "Description": docstring, "Accuracy": accuracy, "f1 scores": f1_score})
      # Save results to CSV
      df = pd.DataFrame(results)
      df.to_csv("model_evaluation.csv", index=False)
