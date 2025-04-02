@@ -1,0 +1,37 @@
+Model,Description,Accuracy,f1 scores
+model_random_forest_model_V1,Simple Random ForestModel with 100 n_estimators,1.0,"              precision    recall  f1-score   support
+
+       False       1.00      1.00      1.00      1356
+        True       1.00      1.00      1.00      1920
+
+    accuracy                           1.00      3276
+   macro avg       1.00      1.00      1.00      3276
+weighted avg       1.00      1.00      1.00      3276
+"
+model_random_forest_model_V2,Use RandomSearchCV to optimize the random forest model    ,1.0,"              precision    recall  f1-score   support
+
+       False       1.00      1.00      1.00      1356
+        True       1.00      1.00      1.00      1920
+
+    accuracy                           1.00      3276
+   macro avg       1.00      1.00      1.00      3276
+weighted avg       1.00      1.00      1.00      3276
+"
+model_logistic_regression_v1,Logistic Regression,0.9469971423303836,"              precision    recall  f1-score   support
+
+       False       0.93      0.95      0.94      1356
+        True       0.96      0.95      0.95      1920
+
+    accuracy                           0.95      3276
+   macro avg       0.94      0.95      0.95      3276
+weighted avg       0.95      0.95      0.95      3276
+"
+model_logistic_regression_v2,Logistic Regression,0.9470409292035398,"              precision    recall  f1-score   support
+
+       False       0.93      0.95      0.94      1356
+        True       0.96      0.95      0.95      1920
+
+    accuracy                           0.95      3276
+   macro avg       0.94      0.95      0.95      3276
+weighted avg       0.95      0.95      0.95      3276
+"

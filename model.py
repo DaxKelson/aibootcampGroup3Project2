@@ -69,7 +69,10 @@ def model_random_forest_model_V2(X_train, y_train, SEED=42):
     rf = RandomForestClassifier(random_state=SEED)
     random_search = RandomizedSearchCV(rf, param_grid, n_iter=10, cv=3, n_jobs=-1, verbose=1, scoring='accuracy')
     random_search.fit(X_train, y_train)
-    
+    print("Best Parameters: ")
+    print(random_search.best_params_)
+
+
     return random_search.best_estimator_
     
 def model_logistic_regression_v1(X_train, y_train, SEED=42):
@@ -95,7 +98,7 @@ def model_logistic_regression_v2(X_train, y_train, SEED=42):
         Logistic Regression
     """
     param_grid = {
-        'C': [0.01, 0.1, 1, 10, 100, 200, 300, 400, 500],   # Regularization strength
+        'C': [0.01, 0.1, 1, 10, 100, 200],   # Regularization strength
         'solver': ['liblinear', 'lbfgs'] # Different solvers
     }
 
@@ -184,8 +187,6 @@ def ADABoost_V3():
     }
     grid_clf = GridSearchCV(random_tuned_model, param_grid, verbose=3)
     return grid_clf
-    return AdaBoostClassifier(n_estimators=50, learning_rate=1)
-
 def evaluate_models(X_test, y_test):
      results = []
      for name, func in globals().items():
