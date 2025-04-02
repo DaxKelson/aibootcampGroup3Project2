@@ -29,8 +29,8 @@ E-commerce businesses often struggle with cart abandonment and customer retentio
 - We used `StandardScaler` to normalize continuous numerical features.
 - Categorical features were encoded using `OneHotEncoder` and `OrdinalEncoder`.
 - The data was split into training and testing sets to evaluate model performance effectively.
-![Clean up and preprocessing](Slide Deck/Project2_Slide_5.jpg)
 
+<img src="Slide Deck/Project2_Slide_5.jpg" alt="Cleanup and Preprocessing" width="200">
 
 ## Model Selection and Training
 
@@ -40,7 +40,8 @@ We experimented with multiple machine learning models, including:
 2. **Decision Trees**
 3. **Random Forest Classifier** (best performing)
 4. **Gradient Boosting Machines (GBM)**
-![Model Performance Results](Slide Deck/Project2_Slide_9.jpg)
+
+<img src="Slide Deck/Project2_Slide_9.jpg" alt="Model Performance Results" width="200">
 
 ### Best Performing Model: Random Forest Classifier
 
@@ -50,7 +51,7 @@ We experimented with multiple machine learning models, including:
   - Precision: 82%
   - Recall: 88%
 - **Model was saved using `joblib` for deployment.**
-![Performance Metrics](Slide Deck/Project2_Slide_10.jpg)
+<img src="Slide Deck/Project2_Slide_10.jpg" alt="Performance Metrics" width="200">
 
 ## How to Install and Run
 
