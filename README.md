@@ -60,3 +60,6 @@ We experimented with multiple machine learning models, including:
 # Sources
 * https://www.kaggle.com/code/tilii7/hyperparameter-grid-search-with-xgboost
 * https://www.kaggle.com/code/bachnguyentfk/adaboost-hyperparameters-grid-search
+* https://xgboost.readthedocs.io/en/latest/parameter.html
+* https://xgboost.readthedocs.io/en/latest/tutorials/model_tuning.html
+* https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html

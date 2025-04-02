@@ -150,6 +150,10 @@ def model_xgboost_V2(X_train, y_train, SEED=42):
     # Create the grid search estimator along with a parameter object containing the values to adjust.
     grid_tuned_model = xgb.XGBClassifier(random_state=42)
 
+    # Create the parameter object for the grid search estimator.
+    # The parameters are based on the XGBoost documentation and common practices.
+    # https://xgboost.readthedocs.io/en/latest/parameter.html
+    # https://xgboost.readthedocs.io/en/latest/tutorials/model_tuning.html
     param_grid = {
         'min_child_weight': [1, 5, 10],
         'gamma': [0.5, 1, 1.5, 2, 5],
@@ -170,6 +174,10 @@ def model_xgboost_V3(X_train, y_train, SEED=42):
     # Create the parameter object for the randomized search estimator.    
     random_tuned_model = xgb.XGBClassifier(random_state=42)
 
+    # Create the parameter object for the grid search estimator.
+    # The parameters are based on the XGBoost documentation and common practices.
+    # https://xgboost.readthedocs.io/en/latest/parameter.html
+    # https://xgboost.readthedocs.io/en/latest/tutorials/model_tuning.html
     param_grid = {
         'min_child_weight': [1, 5, 10],
         'gamma': [0.5, 1, 1.5, 2, 5],
@@ -197,6 +205,9 @@ def model_adaboost_V2(X_train, y_train, SEED=42):
     # Create the grid search estimator along with a parameter object containing the values to adjust.
     grid_tuned_model = AdaBoostClassifier(random_state=42)
 
+    # Create the parameter object for the grid search estimator.
+    # The parameters are based on the adaboost documentation and common practices.
+    # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html
     param_grid = {
         'n_estimators': [50, 100, 200],
         'learning_rate': [0.1, 0.5, 1]
@@ -214,12 +225,18 @@ def model_adaboost_V3(X_train, y_train, SEED=42):
     # Create the parameter object for the randomized search estimator.
     random_tuned_model = AdaBoostClassifier(random_state=42)
 
+    # Create the parameter object for the grid search estimator.
+    # The parameters are based on the adaboost documentation and common practices.
+    # https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html
     param_grid = {
         'n_estimators': [50, 100, 200],
         'learning_rate': [0.1, 0.5, 1]
     }
-    grid_clf = GridSearchCV(random_tuned_model, param_grid, verbose=3)
-    return grid_clf
+    rand_clf = RandomizedSearchCV(random_tuned_model, param_grid, verbose=3)
+    rand_clf.fit(X_train, y_train)
+    print("Best parameters found: ", rand_clf.best_params_)
+    print("Best score found: ", rand_clf.best_score_)
+    return rand_clf.best_estimator_
 
 def evaluate_models(X_test, y_test):
      results = []
