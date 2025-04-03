@@ -47,6 +47,7 @@ We experimented with multiple machine learning models, including:
   - Precision: 82%
   - Recall: 88%
 - **Model was saved using `joblib` for deployment.**
+<img src="Slide Deck/Project2_Slide_10.jpg" alt="Performance Metrics" width="200">
 
 <img src="Slide Deck/Project2_Slide_10.jpg" alt="Performance Metrics" width="700">
 
